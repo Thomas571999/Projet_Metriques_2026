@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Précipitations à Séoul</title>
+
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(135deg, #141e30, #243b55);
+
+            color: white;
+
+            margin: 0;
+
+            padding: 30px;
+        }
+
+        h1 {
+
+            text-align: center;
+
+            font-size: 40px;
+        }
+
+        p {
+
+            text-align: center;
+
+            color: #cccccc;
+        }
+
+        #chart {
+
+            width: 100%;
+
+            height: 600px;
+
+            margin-top: 40px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>🌧️ Précipitations à Séoul</h1>
+
+    <p>Données météo Open-Meteo • AreaChart Google Charts</p>
+
+    <div id="chart"></div>
+
+<script>
+
+google.charts.load('current', {'packages':['corechart']});
+
+google.charts.setOnLoadCallback(init);
+
+async function init() {
+
+    const response = await fetch('/atelier');
+
+    const json = await response.json();
+
+    const data = new google.visualization.DataTable();
+
+    data.addColumn('string', 'Date');
+
+    data.addColumn('number', 'Précipitations');
+
+    json.forEach(item => {
+
+        data.addRow([
+            item.datetime,
+            Number(item.precipitation)
+        ]);
+
+    });
+
+    const options = {
+
+        title: 'Précipitations horaires à Séoul',
+
+        hAxis: {
+            title: 'Date'
+        },
+
+        vAxis: {
+            title: 'mm'
+        },
+
+        legend: { position: 'bottom' },
+
+        areaOpacity: 0.4
+    };
+
+    const chart = new google.visualization.AreaChart(
+        document.getElementById('chart')
+    );
+
+    chart.draw(data, options);
+}
+
+</script>
+
+</body>
+
+</html>
