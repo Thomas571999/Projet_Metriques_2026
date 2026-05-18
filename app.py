@@ -39,7 +39,7 @@ def histogramme():
     return render_template("histogramme.html")
 
 
-@app.route("/seoul")
+@app.route("/atelier")
 def seoul():
 
     url = "https://api.open-meteo.com/v1/forecast?latitude=37.566&longitude=126.9784&hourly=precipitation"
