@@ -39,6 +39,32 @@ def histogramme():
     return render_template("histogramme.html")
 
 
+@app.route("/seoul")
+def seoul():
+
+    url = "https://api.open-meteo.com/v1/forecast?latitude=37.566&longitude=126.9784&hourly=precipitation"
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    times = data.get("hourly", {}).get("time", [])
+
+    precipitations = data.get("hourly", {}).get("precipitation", [])
+
+    n = min(len(times), len(precipitations))
+
+    result = [
+        {
+            "datetime": times[i],
+            "precipitation": precipitations[i]
+        }
+        for i in range(n)
+    ]
+
+    return jsonify(result)
+
+
 # Ne rien mettre après ce commentaire
     
 if __name__ == "__main__":
