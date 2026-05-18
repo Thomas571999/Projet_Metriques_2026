@@ -4,141 +4,464 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact</title>
-
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #0f0e0c;
+            --paper: #f5f0e8;
+            --sand: #e8dfc8;
+            --rust: #b84c2a;
+            --rust-light: #d4603a;
+            --muted: #8a8070;
+            --line: rgba(15,14,12,0.12);
+        }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-
-            height: 100vh;
-
+            font-family: 'DM Mono', monospace;
+            background-color: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        .container {
-
-            background: white;
-
-            width: 420px;
-
-            padding: 40px;
-
-            border-radius: 20px;
-
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-
-            animation: apparition 1s ease;
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.4;
         }
 
-        @keyframes apparition {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Decorative background lines */
+        .bg-lines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-lines::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, var(--line) 0px, transparent 1px, transparent 60px),
+                repeating-linear-gradient(90deg, var(--line) 0px, transparent 1px, transparent 60px);
+        }
+        .bg-lines::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            top: -200px;
+            right: -150px;
         }
 
-        h1 {
-            text-align: center;
-            color: #1e3c72;
-            margin-bottom: 30px;
+        /* Floating decorative circles */
+        .deco-circle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
         }
+        .deco-circle-1 {
+            width: 600px; height: 600px;
+            border: 1px solid var(--line);
+            top: -250px; right: -200px;
+        }
+        .deco-circle-2 {
+            width: 300px; height: 300px;
+            border: 1px solid var(--line);
+            bottom: -100px; left: -100px;
+        }
+        .deco-circle-3 {
+            width: 120px; height: 120px;
+            background: var(--rust);
+            opacity: 0.08;
+            bottom: 80px; right: 60px;
+            filter: blur(40px);
+        }
+
+        /* Layout */
+        .page {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 0;
+            max-width: 900px;
+            width: 95%;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            box-shadow:
+                0 0 0 6px var(--paper),
+                0 0 0 7px var(--line),
+                12px 16px 60px rgba(15,14,12,0.14);
+            animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Left panel */
+        .panel-left {
+            padding: 52px 40px;
+            background: var(--ink);
+            color: var(--paper);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .panel-left::before {
+            content: '';
+            position: absolute;
+            width: 280px; height: 280px;
+            border-radius: 50%;
+            border: 1px solid rgba(245,240,232,0.08);
+            bottom: -100px; right: -80px;
+        }
+        .panel-left::after {
+            content: '';
+            position: absolute;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            border: 1px solid rgba(245,240,232,0.06);
+            bottom: -30px; right: 30px;
+        }
+
+        .eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--rust-light);
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+        }
+        .panel-title em {
+            font-style: italic;
+            color: var(--rust-light);
+        }
+
+        .panel-desc {
+            font-size: 11px;
+            line-height: 1.8;
+            color: rgba(245,240,232,0.5);
+            margin-top: 24px;
+            font-weight: 300;
+        }
+
+        .contact-info {
+            margin-top: auto;
+            padding-top: 40px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 11px;
+            color: rgba(245,240,232,0.6);
+        }
+        .info-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--rust-light);
+            flex-shrink: 0;
+        }
+
+        .footer-tag {
+            margin-top: 40px;
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(245,240,232,0.25);
+            border-top: 1px solid rgba(245,240,232,0.08);
+            padding-top: 20px;
+        }
+
+        /* Right panel */
+        .panel-right {
+            padding: 52px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+            margin-top: 26px;
+            transition: color 0.2s;
+        }
+        .form-group:first-child .form-label { margin-top: 0; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .form-row .form-group { margin-top: 0; }
+        .form-row .form-label { margin-top: 0; }
 
         input, textarea {
-
             width: 100%;
-
-            padding: 12px;
-
-            margin-top: 10px;
-            margin-bottom: 20px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 10px;
-
-            font-size: 16px;
-
-            box-sizing: border-box;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            background: transparent;
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.3s;
         }
+        input::placeholder, textarea::placeholder {
+            color: rgba(15,14,12,0.2);
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+        }
+        input:focus, textarea:focus {
+            border-bottom-color: var(--rust);
+        }
+        input:focus + .focus-line,
+        textarea:focus + .focus-line { transform: scaleX(1); }
 
         textarea {
             resize: none;
-            height: 120px;
+            height: 100px;
+            line-height: 1.8;
         }
 
-        button {
+        .field-wrap {
+            position: relative;
+        }
 
-            width: 100%;
+        .submit-row {
+            margin-top: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
 
-            padding: 14px;
+        .submit-note {
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.5;
+            flex: 1;
+        }
 
+        button[type="submit"] {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--ink);
+            color: var(--paper);
             border: none;
-
-            border-radius: 10px;
-
-            background: #1e3c72;
-
-            color: white;
-
-            font-size: 18px;
-
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             cursor: pointer;
-
-            transition: 0.3s;
+            transition: background 0.3s, transform 0.2s;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
         }
-
-        button:hover {
-            background: #2a5298;
-            transform: scale(1.02);
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--rust);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        button[type="submit"]:hover::before { transform: translateX(0); }
+        button[type="submit"]:hover { transform: translateY(-1px); }
+        button[type="submit"] span { position: relative; z-index: 1; }
+        .btn-arrow {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s;
+        }
+        button[type="submit"]:hover .btn-arrow { transform: translateX(4px); }
 
-        .footer {
+        /* Success state */
+        .success-msg {
+            display: none;
             text-align: center;
-            margin-top: 20px;
-            color: gray;
-            font-size: 14px;
+            padding: 20px;
+        }
+        .success-msg.show { display: block; animation: rise 0.5s ease both; }
+        .success-icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .success-msg p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-style: italic;
+            color: var(--muted);
         }
 
+        @media (max-width: 640px) {
+            .page { grid-template-columns: 1fr; }
+            .panel-left { padding: 36px 28px; }
+            .panel-right { padding: 36px 28px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .submit-row { flex-direction: column; align-items: flex-start; }
+            button[type="submit"] { width: 100%; justify-content: center; }
+        }
     </style>
-
 </head>
-
 <body>
 
-    <div class="container">
+<div class="bg-lines"></div>
+<div class="deco-circle deco-circle-1"></div>
+<div class="deco-circle deco-circle-2"></div>
+<div class="deco-circle deco-circle-3"></div>
 
-        <h1>📩 Contactez-moi</h1>
+<div class="page">
 
-        <form>
+    <!-- Left panel -->
+    <div class="panel-left">
+        <div>
+            <p class="eyebrow">✦ Formulaire de contact</p>
+            <h1 class="panel-title">
+                Écrivez-<br><em>moi</em>
+            </h1>
+            <p class="panel-desc">
+                Une idée, une question,<br>
+                une collaboration en vue ?<br>
+                Je serai ravi de vous lire.
+            </p>
+        </div>
 
-            <input type="text" placeholder="Votre prénom">
+        <div class="contact-info">
+            <div class="info-item">
+                <span class="info-dot"></span>
+                <span>Projet Flask &amp; Codespaces</span>
+            </div>
+            <div class="info-item">
+                <span class="info-dot"></span>
+                <span>Déployé via GitHub</span>
+            </div>
+            <div class="info-item">
+                <span class="info-dot"></span>
+                <span>Réponse sous 48 h</span>
+            </div>
+        </div>
 
-            <input type="text" placeholder="Votre nom">
+        <p class="footer-tag">Flask · Codespaces · GitHub · 2025</p>
+    </div>
 
-            <textarea placeholder="Votre message..."></textarea>
+    <!-- Right panel -->
+    <div class="panel-right">
 
-            <button type="submit">
-                Envoyer le message
-            </button>
+        <form id="contactForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="prenom">Prénom</label>
+                    <div class="field-wrap">
+                        <input type="text" id="prenom" name="prenom" placeholder="Jean" autocomplete="given-name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="nom">Nom</label>
+                    <div class="field-wrap">
+                        <input type="text" id="nom" name="nom" placeholder="Dupont" autocomplete="family-name" required>
+                    </div>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <label class="form-label" for="email">E-mail</label>
+                <div class="field-wrap">
+                    <input type="email" id="email" name="email" placeholder="jean@exemple.fr" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="message">Message</label>
+                <div class="field-wrap">
+                    <textarea id="message" name="message" placeholder="Votre message, vos idées..." required></textarea>
+                </div>
+            </div>
+
+            <div class="submit-row">
+                <p class="submit-note">
+                    Les données saisies<br>restent confidentielles.
+                </p>
+                <button type="submit">
+                    <span>Envoyer</span>
+                    <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
         </form>
 
-        <div class="footer">
-            Projet Flask • Codespaces • GitHub
+        <div class="success-msg" id="successMsg">
+            <span class="success-icon">✦</span>
+            <p>Message bien reçu,<br>merci de m'avoir écrit.</p>
         </div>
 
     </div>
+</div>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        this.style.opacity = '0';
+        this.style.transition = 'opacity 0.4s ease';
+        setTimeout(() => {
+            this.style.display = 'none';
+            document.getElementById('successMsg').classList.add('show');
+        }, 400);
+    });
+
+    // Animate labels on focus
+    document.querySelectorAll('input, textarea').forEach(el => {
+        el.addEventListener('focus', () => {
+            el.previousElementSibling && (el.previousElementSibling.style.color = 'var(--rust)');
+            el.closest('.form-group')?.querySelector('.form-label') &&
+                (el.closest('.form-group').querySelector('.form-label').style.color = 'var(--rust)');
+        });
+        el.addEventListener('blur', () => {
+            el.closest('.form-group')?.querySelector('.form-label') &&
+                (el.closest('.form-group').querySelector('.form-label').style.color = '');
+        });
+    });
+</script>
 
 </body>
 </html>
